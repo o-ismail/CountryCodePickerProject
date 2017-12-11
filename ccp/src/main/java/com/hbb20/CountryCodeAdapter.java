@@ -138,10 +138,10 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
 
         //if query started from "+" ignore it
         if (query.length() > 0 && query.charAt(0) == '+') {
-            query=query.substring(1);
+            query = query.substring(1);
         }
 
-        filteredCountries= getFilteredCountries(query);
+        filteredCountries = getFilteredCountries(query);
 
         if (filteredCountries.size() == 0) {
             textView_noResult.setVisibility(View.VISIBLE);
@@ -152,7 +152,7 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
     private List<Country> getFilteredCountries(String query) {
         List<Country> tempCountryList = new ArrayList<Country>();
         preferredCountriesCount = 0;
-        if(codePicker.preferredCountries!=null && codePicker.preferredCountries.size()>0) {
+        if (codePicker.preferredCountries != null && codePicker.preferredCountries.size() > 0) {
             for (Country country : codePicker.preferredCountries) {
                 if (country.isEligibleForQuery(query)) {
                     tempCountryList.add(country);
@@ -184,25 +184,26 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
 
     @Override
     public void onBindViewHolder(CountryCodeViewHolder countryCodeViewHolder, final int i) {
-        countryCodeViewHolder.setCountry(filteredCountries.get(i));
-        if (filteredCountries.get(i) != null) {
-            countryCodeViewHolder.getMainView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (filteredCountries != null && filteredCountries.size() > i) {
-                        codePicker.onUserTappedCountry(filteredCountries.get(i));
+        if (filteredCountries.size() > i) {
+            countryCodeViewHolder.setCountry(filteredCountries.get(i));
+            if (filteredCountries.get(i) != null) {
+                countryCodeViewHolder.getMainView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (filteredCountries != null && filteredCountries.size() > i) {
+                            codePicker.onUserTappedCountry(filteredCountries.get(i));
+                        }
+                        if (view != null && filteredCountries.get(i) != null) {
+                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            dialog.dismiss();
+                        }
                     }
-                    if (view != null && filteredCountries.get(i) != null) {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        dialog.dismiss();
-                    }
-                }
-            });
-        } else {
-            countryCodeViewHolder.getMainView().setOnClickListener(null);
+                });
+            } else {
+                countryCodeViewHolder.getMainView().setOnClickListener(null);
+            }
         }
-
     }
 
     @Override
@@ -260,7 +261,7 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
         }
 
         public void setCountry(Country country) {
-            if(country!=null) {
+            if (country != null) {
                 divider.setVisibility(View.GONE);
                 textView_name.setVisibility(View.VISIBLE);
                 textView_code.setVisibility(View.VISIBLE);
@@ -273,7 +274,7 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
                 textView_name.setText(country.getName() + " (" + country.getNameCode().toUpperCase() + ")");
                 textView_code.setText("+" + country.getPhoneCode());
                 imageViewFlag.setImageResource(country.getFlagID());
-            }else{
+            } else {
                 divider.setVisibility(View.VISIBLE);
                 textView_name.setVisibility(View.GONE);
                 textView_code.setVisibility(View.GONE);
