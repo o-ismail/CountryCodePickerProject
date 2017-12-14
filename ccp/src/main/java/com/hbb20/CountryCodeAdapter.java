@@ -191,12 +191,16 @@ class CountryCodeAdapter extends RecyclerView.Adapter<CountryCodeAdapter.Country
                     @Override
                     public void onClick(View view) {
                         if (filteredCountries != null && filteredCountries.size() > i) {
-                            codePicker.onUserTappedCountry(filteredCountries.get(i));
-                        }
-                        if (view != null && filteredCountries.get(i) != null) {
-                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                            dialog.dismiss();
+                            if (filteredCountries.get(i) != null) {
+                                codePicker.onUserTappedCountry(filteredCountries.get(i));
+                                if (view != null) {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    if (imm != null) {
+                                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                    }
+                                    dialog.dismiss();
+                                }
+                            }
                         }
                     }
                 });
